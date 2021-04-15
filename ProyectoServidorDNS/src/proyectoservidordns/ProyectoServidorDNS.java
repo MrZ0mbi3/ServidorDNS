@@ -18,7 +18,15 @@ public class ProyectoServidorDNS {
     public static void main(String[] args) {
         // TODO code application logic here
         servidor server= new servidor();
-        server.servidorActivo();
+        //iniciador del servidor se activa cuando se necesita probar el servidor
+        //server.servidorActivo();
+
+
+        //ejemplo para convertir un numero a un string a binario 
+        short n = 32;
+    
+        String cadena = new String(Long.toBinaryString((long) n ));
+        System.out.println(cadena);
     }
     
 }
