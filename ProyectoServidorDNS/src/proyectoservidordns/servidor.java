@@ -24,16 +24,35 @@ public class servidor {
     {
         try
         {
-            DatagramSocket servidorActivo= new DatagramSocket(53, InetAddress.getByName("192.168.0.5"));
+            DatagramSocket servidorActivo= new DatagramSocket(53, InetAddress.getByName("192.168.0.6"));
             byte[] buffer = new byte[1000];
+            HeaderFormat encabezado= new HeaderFormat();
+            MensajeRespuesta mensaje = new MensajeRespuesta();
+            String respuesta;
+            byte[] bMensaje= new byte[1000];
+            
+            
+            
             while(true)   
             {
                 DatagramPacket mensajePeticion = new DatagramPacket(buffer, buffer.length);
                 
                 servidorActivo.receive(mensajePeticion);
-                System.out.println("mensaje recibido del host = "+ mensajePeticion.getAddress() + "desde el puerto: " + mensajePeticion.getPort() + "  data= "+ new String (mensajePeticion.getData()));
                 
-                DatagramPacket mensajeRespuesta = new DatagramPacket(mensajePeticion.getData(), mensajePeticion.getLength(),mensajePeticion.getAddress(),mensajePeticion.getPort());
+                //System.out.println("mensaje recibido del host = "+ mensajePeticion.getAddress() + "desde el puerto: " + mensajePeticion.getPort() + "  data= "+ new String (mensajePeticion.getData()));
+                //prueba
+                byte[] pruebaMnesaje = mensajePeticion.getData();
+                System.out.println("prueba puerto "+ mensajePeticion.getPort() + mensajePeticion.getLength());
+                
+                HeaderFormat prueba = new HeaderFormat();
+                prueba.setFlags(pruebaMnesaje);
+                mensajePeticion.
+                //
+
+                respuesta=encabezado.EncabezadoMensajeRespuestaSinError()+mensaje.MensajeRespuesta();
+                bMensaje=respuesta.getBytes();
+
+                DatagramPacket mensajeRespuesta = new DatagramPacket(bMensaje, respuesta.length(),mensajePeticion.getAddress(),mensajePeticion.getPort());
                 servidorActivo.send(mensajeRespuesta);
             }
             

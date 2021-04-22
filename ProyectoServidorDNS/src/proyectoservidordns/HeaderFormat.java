@@ -1,38 +1,105 @@
 package proyectoservidordns;
 
 public class HeaderFormat {
-    short ID;
-    boolean QR;
-    byte OpCode;
-    boolean AA;
-    boolean TC;
-    boolean RD;
-    boolean RA;
-    byte Z;
-    byte RCode;
+    short ID; //2 bytes
+    // FLAGS
+    boolean QR; // 1 bit            |
+    byte   OpCode; // son 4 bits    |
+    boolean AA; // 1 bit            |
+    boolean TC;// 1 bit             |1 byte
+    boolean RD;// 1 bit             |________________
+    boolean RA; // 1 bit            |
+    byte Z; // 3 bits los 3 en 0    | 1 byte
+    byte RCode; //4 bits            |
+    /// FLAGS
     short QDCount;
     short ANCount;
     short NSCount;
     short ARCount;
-    
+    // Header en byte
+    byte[] encabezado;
     public HeaderFormat() {
+        //se crea con 12 porque un byte almacena 8 bits y se necesitan 6 espacios de 16 bits
+        encabezado= new byte[12];
+        this.QR= true;
+        this.OpCode=1;
+        this.AA=false;
+        this.TC=false;
+        this.RD=false;
+        this.RA=true;
+        this.Z=0;
+        this.RCode=1;
+
     }
 
-    public HeaderFormat(short iD, boolean qR, byte opCode, boolean aA, boolean tC, boolean rD, boolean rA, byte z,
-            byte rCode, short qDCount, short aNCount, short nSCount, short aRCount) {
-        ID = iD;
-        QR = qR;
-        OpCode = opCode;
-        AA = aA;
-        TC = tC;
-        RD = rD;
-        RA = rA;
-        Z = z;
-        RCode = rCode;
-        QDCount = qDCount;
-        ANCount = aNCount;
-        NSCount = nSCount;
-        ARCount = aRCount;
+    
+    public void setFlags(byte[] mensaje )
+    {
+        short aux=(short) (mensaje[0] & 0x80);
+        this.QR= aux== 0x80 ? true : false;
+        aux= (short) (mensaje[0] &0x78);
+        this.OpCode= (byte) (aux>>3);
+        System.out.println("prueba" + QR + " flag op code= "+ OpCode);
+        
+        
+        
     }
+
+    public void hacerEncabezado( byte[] mensajePregunta)
+    {       // guarda el ID del encabezado de la pregunta que le llega
+        this.encabezado[0]=mensajePregunta[0];
+        this.encabezado[1]=mensajePregunta[1];
+        System.out.println(this.encabezado.length );
+        //
+        //
+        this.hacerFlags();
+
+
+
+    }
+    public void hacerFlags()
+    {
+        byte aux=0;
+        byte aux2=0;
+        if(this.QR)
+        {
+            //1000 0000
+            aux=(byte) 128;
+        }
+        //para que se compare en la posicion correcta
+        //1_ _ _  _000
+        this.OpCode= (byte) (this.OpCode<<3);
+
+        aux=(byte) (aux|this.OpCode);
+        if(this.AA)
+        {   //1000 0_00
+            aux=(byte)(aux|4);
+        }
+        if(this.TC)
+        {
+            //1000 00_0
+            aux=(byte)(aux|2);
+        }
+        if(this.RD)
+        {
+            //1000 00_0
+            aux=(byte)(aux|1);
+
+        }
+        System.out.println(aux );
+        System.out.println(Long.toBinaryString((long) aux));
+        //se guarda el primer byte de los flags desde QR a RD
+        this.encabezado[2]=aux;
+
+        if(this.RA)
+        {
+            aux2=(byte)128;
+        }
+        aux2=(byte)(aux2 | this.RCode);
+        System.out.println(aux2);
+        System.out.println(Long.toBinaryString((long) aux2));
+        this.encabezado[3]=aux2;
+    }
+
     
 }

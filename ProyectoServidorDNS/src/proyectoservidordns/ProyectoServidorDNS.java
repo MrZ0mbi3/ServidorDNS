@@ -20,13 +20,28 @@ public class ProyectoServidorDNS {
         servidor server= new servidor();
         //iniciador del servidor se activa cuando se necesita probar el servidor
         //server.servidorActivo();
+        
+        
 
 
         //ejemplo para convertir un numero a un string a binario 
-        short n = 32;
+        /*short n = 30000;
     
         String cadena = new String(Long.toBinaryString((long) n ));
-        System.out.println(cadena);
+        System.out.println(cadena);*/
+        
+        
+        //Prueba
+        
+       /* byte[] mensajePrueba = new byte[2];
+        mensajePrueba[0]=(byte) 0xB5;
+        mensajePrueba[1]=15;
+        System.out.println("prueba byte" + mensajePrueba[0]);*/
+        //HeaderFormat prueba = new HeaderFormat();
+        //prueba.setFlags(mensajePrueba);
+        
+        HeaderFormat prueba=new HeaderFormat();
+        prueba.hacerFlags();
     }
     
 }
