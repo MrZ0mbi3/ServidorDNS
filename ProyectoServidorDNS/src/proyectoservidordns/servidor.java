@@ -39,20 +39,21 @@ public class servidor {
                 
                 servidorActivo.receive(mensajePeticion);
                 
-                //System.out.println("mensaje recibido del host = "+ mensajePeticion.getAddress() + "desde el puerto: " + mensajePeticion.getPort() + "  data= "+ new String (mensajePeticion.getData()));
-                //prueba
-                byte[] pruebaMnesaje = mensajePeticion.getData();
-                System.out.println("prueba puerto "+ mensajePeticion.getPort() + mensajePeticion.getLength());
+                System.out.println("mensaje recibido del host = "+ mensajePeticion.getAddress() + "desde el puerto: " + mensajePeticion.getPort()) ;
+                //byte[] pruebaMnesaje = mensajePeticion.getData();
+                System.out.println("prueba puerto "+ mensajePeticion.getPort() + "tamano del mensaje"+ mensajePeticion.getLength());
                 
                 HeaderFormat prueba = new HeaderFormat();
-                prueba.setFlags(pruebaMnesaje);
-                mensajePeticion.
+                //prueba.setFlags(pruebaMnesaje);
+                //System.out.println(pruebaMnesaje[0]);
+                prueba.leerMensajePregunta(mensajePeticion);
                 //
 
-                respuesta=encabezado.EncabezadoMensajeRespuestaSinError()+mensaje.MensajeRespuesta();
-                bMensaje=respuesta.getBytes();
+                //respuesta=encabezado.EncabezadoMensajeRespuestaSinError()+mensaje.MensajeRespuesta();
+                //bMensaje=respuesta.getBytes();
+                 String resp= "hola1";
 
-                DatagramPacket mensajeRespuesta = new DatagramPacket(bMensaje, respuesta.length(),mensajePeticion.getAddress(),mensajePeticion.getPort());
+                DatagramPacket mensajeRespuesta = new DatagramPacket(resp.getBytes(), resp.length(),mensajePeticion.getAddress(),mensajePeticion.getPort());
                 servidorActivo.send(mensajeRespuesta);
             }
             

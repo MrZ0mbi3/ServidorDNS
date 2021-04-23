@@ -1,5 +1,7 @@
 package proyectoservidordns;
 
+import java.net.DatagramPacket;
+
 public class HeaderFormat {
     short ID; //2 bytes
     // FLAGS
@@ -35,14 +37,51 @@ public class HeaderFormat {
     
     public void setFlags(byte[] mensaje )
     {
-        short aux=(short) (mensaje[0] & 0x80);
+        short aux=(short) (mensaje[2] & 0x80);
         this.QR= aux== 0x80 ? true : false;
-        aux= (short) (mensaje[0] &0x78);
+        aux= (short) (mensaje[2] &0x78);
         this.OpCode= (byte) (aux>>3);
         System.out.println("prueba" + QR + " flag op code= "+ OpCode);
         
         
         
+    }
+    public void leerMensajePregunta(DatagramPacket PaqueteMensaje)
+    {
+        byte[] mensaje= PaqueteMensaje.getData();
+        System.out.println("_________________________________________________Mensaje entrante __________________________________________________________");
+        System.out.println("se imprime header");
+        System.out.println("ID "+ (mensaje[0] | mensaje[1]));
+        System.out.println("QR "+  (mensaje[2]& 128) );
+        System.out.println("OpCode "+(mensaje[2]& 120) );
+        System.out.println("AA "+  (mensaje[2]& 4) );
+        System.out.println("TC "+  (mensaje[2]& 2) );
+        System.out.println("RD "+  (mensaje[2]& 1) );
+        System.out.println("RA "+  (mensaje[3]& 128) );
+        System.out.println("Z "+  (mensaje[3]& 112) );
+        System.out.println("RCode "+  (mensaje[3]& 15) );
+        System.out.println("QDCount "+  (mensaje[4] | mensaje [5]) );
+        System.out.println("ANCount "+  (mensaje[6] | mensaje [7]) );;
+        System.out.println("NSCount "+  (mensaje[8] | mensaje [9]) );
+        System.out.println("ARCount "+  (mensaje[10] | mensaje [11]) );
+        System.out.println("Fin del encabezado");
+        System.out.println("Inicio de la query");
+        for(int i=0; i<PaqueteMensaje.getLength()-4 ; i++)
+        {
+                System.out.println("linea "+ i + "mensaje "+(mensaje[i] | mensaje[i+1])  ) ;
+
+        }
+        System.out.println("Qtype " + (mensaje[PaqueteMensaje.getLength()-4] + mensaje[PaqueteMensaje.getLength()-3]));
+        System.out.println("QClass " + (mensaje[PaqueteMensaje.getLength()-2] + mensaje[PaqueteMensaje.getLength()-1]));
+        System.out.println(" tamano " + PaqueteMensaje.getLength());
+
+
+
+
+
+
+
+
     }
 
     public void hacerEncabezado( byte[] mensajePregunta)

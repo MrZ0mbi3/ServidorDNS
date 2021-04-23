@@ -19,7 +19,7 @@ public class ProyectoServidorDNS {
         // TODO code application logic here
         servidor server= new servidor();
         //iniciador del servidor se activa cuando se necesita probar el servidor
-        //server.servidorActivo();
+        server.servidorActivo();
         
         
 
