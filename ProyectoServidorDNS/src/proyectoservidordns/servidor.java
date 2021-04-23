@@ -25,11 +25,11 @@ public class servidor {
         try
         {
             DatagramSocket servidorActivo= new DatagramSocket(53, InetAddress.getByName("192.168.0.6"));
-            byte[] buffer = new byte[1000];
+            byte[] buffer = new byte[512];
             HeaderFormat encabezado= new HeaderFormat();
             MensajeRespuesta mensaje = new MensajeRespuesta();
             String respuesta;
-            byte[] bMensaje= new byte[1000];
+            byte[] bMensaje= new byte[512];
             
             
             
