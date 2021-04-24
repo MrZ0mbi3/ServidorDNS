@@ -41,10 +41,7 @@ public class Servidor {
 	public void obtenerMasterFileData() throws Exception {
 		System.out.println("Entre");
 		BufferedReader br = new BufferedReader(
-				//new FileReader("F:\\Desktop\\anaconda\\ServidorDNS\\ProyectoServidorDNS\\src\\proyectoservidordns\\MasterFile.txt"));
-				new FileReader("D:\\universdad\\semestre 7\\Redes\\proyecto servidor DNS\\proyecto de redes con el git\\ServidorDNS\\ProyectoServidorDNS\\src\\proyectoservidordns\\MasterFile.txt"));
-				
-				
+				new FileReader("F:\\Desktop\\anaconda\\ServidorDNS\\ProyectoServidorDNS\\src\\proyectoservidordns\\MasterFile.txt"));
 		System.out.println("Entre2");
 		String linea;
 		String dominio = "";
@@ -95,7 +92,7 @@ public class Servidor {
     {
         try
         {
-        	DatagramSocket servidorActivo = new DatagramSocket(this.puerto_udp,InetAddress.getByName("192.168.0.6") );//Se conecta a lka direccion ip dada y al puerto esto para que no presente conflictos por el uso de la ip
+        	DatagramSocket servidorActivo = new DatagramSocket(this.puerto_udp);
             byte[] buffer = new byte[this.udpSize];
             HeaderFormat encabezado= new HeaderFormat();
             MensajeRespuesta mensaje = new MensajeRespuesta();

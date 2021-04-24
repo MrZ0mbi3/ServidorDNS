@@ -15,9 +15,9 @@ public class ProyectoServidorDNS {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         // TODO code application logic here
-        servidor server= new servidor();
+        Servidor server= new Servidor();
         //iniciador del servidor se activa cuando se necesita probar el servidor
         server.servidorActivo();
         
@@ -40,8 +40,8 @@ public class ProyectoServidorDNS {
         //HeaderFormat prueba = new HeaderFormat();
         //prueba.setFlags(mensajePrueba);
         
-        HeaderFormat prueba=new HeaderFormat();
-        prueba.hacerFlags();
-    }
+      //  HeaderFormat prueba=new HeaderFormat();
+       // prueba.hacerFlags();
+    //}
     
 }
