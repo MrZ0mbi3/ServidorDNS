@@ -48,6 +48,9 @@ public class HeaderFormat {
     }
     public void leerMensajePregunta(DatagramPacket PaqueteMensaje)
     {
+        String paginaPregunta= new String();
+        String aux2= new String();
+        char[] aux= new char [1];
         byte[] mensaje= PaqueteMensaje.getData();
         System.out.println("_________________________________________________Mensaje entrante __________________________________________________________");
         System.out.println("se imprime header");
@@ -75,9 +78,29 @@ public class HeaderFormat {
         
         for(int i=12; i<PaqueteMensaje.getLength()-5 ; i++)
         {
-                System.out.println("linea "+ i + "mensaje "+(char)(mensaje[i])  ) ;
+                //System.out.println("linea "+ i + "mensaje "+(char)(mensaje[i])  ) ;
+                //System.out.println("linea "+ i + "mensaje "+(mensaje[i])  ) ;
+                if((mensaje[i]>47 && mensaje[i]<58) || (mensaje[i]>64 && mensaje[i]<91 ) || (mensaje[i]>96 && mensaje[i]< 123)) // validar que solo reciba caracteres y numeros
+                {
+                    //System.out.println("linea "+ i + "mensaje "+(char)(mensaje[i])  ) ;
+                    aux[0]=(char) mensaje[i];
+                    System.out.println("linea "+ i + "mensaje "+aux[0]  ) ;
+                    paginaPregunta=aux2.concat(new String(aux));
+                    aux2= paginaPregunta;
+                }
+                else
+                {
+                    if(i!=12)
+                    {
+                        paginaPregunta=aux2.concat(".");
+                        aux2=paginaPregunta;
+                    }
+                    
+                }
+
 
         }
+        System.out.println("pagina buscada =" + paginaPregunta); // encuentra la pagina pero sin puntos
         //Desde 4 antes del tamano final porque hay un byte null despues del mensaje que indica que finalizo este
         System.out.println("Qtype " + (mensaje[PaqueteMensaje.getLength()-4] | mensaje[PaqueteMensaje.getLength()-3]));
         System.out.println("QClass " + (mensaje[PaqueteMensaje.getLength()-2] | mensaje[PaqueteMensaje.getLength()-1]));
@@ -127,14 +150,8 @@ public class HeaderFormat {
             System.out.println(this.encabezado[i]);
         }
 
-
-        
-
-
         //
         //
-        this.hacerFlags();
-
 
 
     }
