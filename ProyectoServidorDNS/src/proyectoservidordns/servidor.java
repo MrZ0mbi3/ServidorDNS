@@ -116,7 +116,8 @@ public class servidor {
                 HeaderFormat prueba = new HeaderFormat();
                 //prueba.setFlags(pruebaMnesaje);
                 //System.out.println(pruebaMnesaje[0]);
-                prueba.leerMensajePregunta(mensajePeticion);
+                //prueba.leerMensajePregunta(mensajePeticion);
+				prueba.hacerEncabezadoRespuesta(mensajePeticion);
                 //
 
                 //respuesta=encabezado.EncabezadoMensajeRespuestaSinError()+mensaje.MensajeRespuesta();
