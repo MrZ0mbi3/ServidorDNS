@@ -1,2 +1,0 @@
-$ORIGIN facebook.com
-facebook.com 1400 IN A 157.240.6.35

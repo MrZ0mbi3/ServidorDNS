@@ -66,6 +66,7 @@ public class HeaderFormat {
         System.out.println("ARCount "+  (mensaje[10] | mensaje [11]) );
         System.out.println("Fin del encabezado");
         System.out.println("Inicio de la query");
+        
         for(int i=12; i<PaqueteMensaje.getLength()-5 ; i++)
         {
                 System.out.println("linea "+ i + "mensaje "+(char)(mensaje[i])  ) ;
