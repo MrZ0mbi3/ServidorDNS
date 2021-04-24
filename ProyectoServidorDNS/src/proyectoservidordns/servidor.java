@@ -40,9 +40,10 @@ public class Servidor {
 
 	public void obtenerMasterFileData() throws Exception {
 		System.out.println("Entre");
-		BufferedReader br = new BufferedReader(
+		BufferedReader br = new BufferedReader(new FileReader(new File("MasterFile.txt")));
 				//new FileReader("F:\\Desktop\\anaconda\\ServidorDNS\\ProyectoServidorDNS\\src\\proyectoservidordns\\MasterFile.txt"));
-				new FileReader("D:\\universdad\\semestre 7\\Redes\\proyecto servidor DNS\\proyecto de redes con el git\\ServidorDNS\\ProyectoServidorDNS\\src\\proyectoservidordns\\MasterFile.txt"));
+				//new FileReader("ProyectoServidorDNS/src/proyectoservidordns/MasterFile.txt"));
+				
 				
 				
 		System.out.println("Entre2");
