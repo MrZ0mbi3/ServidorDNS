@@ -66,20 +66,16 @@ public class HeaderFormat {
         System.out.println("ARCount "+  (mensaje[10] | mensaje [11]) );
         System.out.println("Fin del encabezado");
         System.out.println("Inicio de la query");
-        for(int i=0; i<PaqueteMensaje.getLength()-4 ; i++)
+        for(int i=12; i<PaqueteMensaje.getLength()-5 ; i++)
         {
-                System.out.println("linea "+ i + "mensaje "+(mensaje[i] | mensaje[i+1])  ) ;
+                System.out.println("linea "+ i + "mensaje "+(char)(mensaje[i])  ) ;
 
         }
-        System.out.println("Qtype " + (mensaje[PaqueteMensaje.getLength()-4] + mensaje[PaqueteMensaje.getLength()-3]));
-        System.out.println("QClass " + (mensaje[PaqueteMensaje.getLength()-2] + mensaje[PaqueteMensaje.getLength()-1]));
+        //Desde 4 antes del tamano final porque hay un byte null despues del mensaje que indica que finalizo este
+        System.out.println("Qtype " + (mensaje[PaqueteMensaje.getLength()-4] | mensaje[PaqueteMensaje.getLength()-3]));
+        System.out.println("QClass " + (mensaje[PaqueteMensaje.getLength()-2] | mensaje[PaqueteMensaje.getLength()-1]));
         System.out.println(" tamano " + PaqueteMensaje.getLength());
-
-
-
-
-
-
+        System.out.println("Mensaje sin partir"+new String (PaqueteMensaje.getData()));
 
 
     }
