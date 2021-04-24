@@ -17,14 +17,14 @@ import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Servidor {
+public class servidor {
 
 	
 	private final int puerto_udp = 53;
 	private final int udpSize = 512;
 	private HashMap<String, ArrayList<ResRR>> masterFile;
 
-	public Servidor() {
+	public servidor() {
 		this.masterFile = new HashMap<String, ArrayList<ResRR>>();
 		try {
 			// Saca la informacion del MasterFile para poderla mantener en memoria
@@ -132,13 +132,13 @@ public class Servidor {
         {
             System.out.println("Socket: " + e.getMessage());
         } catch (UnknownHostException ex) {
-            Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(servidor.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(servidor.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     public static void main(String[] args) {
-		Servidor servidor = new Servidor();
+		servidor servidor = new servidor();
 		try {
 			servidor.servidorActivo();
 		} catch (Exception e) {
