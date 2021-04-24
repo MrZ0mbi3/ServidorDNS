@@ -25,10 +25,10 @@ public class HeaderFormat {
         encabezado= new byte[12];
         this.QR= true;
         this.OpCode=1;
-        this.AA=false;
+        this.AA=true;
         this.TC=false;
         this.RD=false;
-        this.RA=true;
+        this.RA=false;
         this.Z=0;
         this.RCode=1;
 
@@ -54,13 +54,19 @@ public class HeaderFormat {
         System.out.println("ID "+ (mensaje[0] | mensaje[1]));
         System.out.println("QR "+  (mensaje[2]& 128) );
         System.out.println("OpCode "+(mensaje[2]& 120) );
+        this.OpCode=(byte) (mensaje[2]& 120);
         System.out.println("AA "+  (mensaje[2]& 4) );
         System.out.println("TC "+  (mensaje[2]& 2) );
+        this.TC= (mensaje[2]& 2)== 1 ? true: false;
         System.out.println("RD "+  (mensaje[2]& 1) );
+        this.RD= (mensaje[2]& 1)== 1 ? true: false;
         System.out.println("RA "+  (mensaje[3]& 128) );
+        this.RA= (mensaje[3]& 128)== 1 ? true: false;
         System.out.println("Z "+  (mensaje[3]& 112) );
         System.out.println("RCode "+  (mensaje[3]& 15) );
+        this.RCode=(byte) (mensaje[3]& 15);
         System.out.println("QDCount "+  (mensaje[4] | mensaje [5]) );
+        this.QDCount=(short) (mensaje[4] | mensaje [5]);
         System.out.println("ANCount "+  (mensaje[6] | mensaje [7]) );;
         System.out.println("NSCount "+  (mensaje[8] | mensaje [9]) );
         System.out.println("ARCount "+  (mensaje[10] | mensaje [11]) );
@@ -81,11 +87,50 @@ public class HeaderFormat {
 
     }
 
-    public void hacerEncabezado( byte[] mensajePregunta)
+    public void hacerEncabezadoRespuesta( DatagramPacket PaqueteMensaje)
     {       // guarda el ID del encabezado de la pregunta que le llega
+        byte[] mensajePregunta= PaqueteMensaje.getData();
+        this.leerMensajePregunta(PaqueteMensaje);
+        System.out.println("_________________________________________________Respuesta Mensaje __________________________________________________________");
         this.encabezado[0]=mensajePregunta[0];
         this.encabezado[1]=mensajePregunta[1];
-        System.out.println(this.encabezado.length );
+        this.encabezado[2]= (byte) 128;//QR
+        this.encabezado[2]=(byte) (this.encabezado[2] | this.OpCode);//Opcode
+        if(this.AA) 
+        {
+            this.encabezado[2]=(byte)(this.encabezado[2] | 4); //autorithy
+        }
+        if (this.TC)
+        {
+            this.encabezado[2]=(byte)(this.encabezado[2] | 2); //TC
+        }
+        if(this.RD)
+        {
+            this.encabezado[2]=(byte)(this.encabezado[2] |1);// RD
+        }
+        if(this.RA)
+        {
+            this.encabezado[3]=(byte)(this.encabezado[3] | 128);//RD
+        }
+        this.encabezado[3]= (byte) (this.encabezado[3] | this.RCode);// RCode se debe cambiar si depronto 
+        this.encabezado[4]= mensajePregunta[4]; //QDCount
+        this.encabezado[5]=mensajePregunta[5]; // QDCount
+        this.encabezado[6]= (byte) (this.ANCount & 0xff00);
+        this.encabezado[7]= (byte) (this.ANCount & 0xff);
+        this.encabezado[8]= 0;
+        this.encabezado[9]= 0;
+        this.encabezado[10]=0;
+        this.encabezado[11]=0;
+
+        for(int i=0 ; i< 12;i++)
+        {
+            System.out.println(this.encabezado[i]);
+        }
+
+
+        
+
+
         //
         //
         this.hacerFlags();
