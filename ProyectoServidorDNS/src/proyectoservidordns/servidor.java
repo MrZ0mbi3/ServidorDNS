@@ -41,11 +41,6 @@ public class servidor {
 	public void obtenerMasterFileData() throws Exception {
 		System.out.println("Entre");
 		BufferedReader br = new BufferedReader(new FileReader(new File("MasterFile.txt")));
-				//new FileReader("F:\\Desktop\\anaconda\\ServidorDNS\\ProyectoServidorDNS\\src\\proyectoservidordns\\MasterFile.txt"));
-				//new FileReader("ProyectoServidorDNS/src/proyectoservidordns/MasterFile.txt"));
-				
-				
-				
 		System.out.println("Entre2");
 		String linea;
 		String dominio = "";
@@ -96,7 +91,7 @@ public class servidor {
     {
         try
         {
-        	DatagramSocket servidorActivo = new DatagramSocket(this.puerto_udp,InetAddress.getByName("192.168.0.6") );//Se conecta a lka direccion ip dada y al puerto esto para que no presente conflictos por el uso de la ip
+        	DatagramSocket servidorActivo = new DatagramSocket(this.puerto_udp,InetAddress.getByName("192.168.1.56") );//Se conecta a lka direccion ip dada y al puerto esto para que no presente conflictos por el uso de la ip
             byte[] buffer = new byte[this.udpSize];
             HeaderFormat encabezado= new HeaderFormat();
             MensajeRespuesta mensaje = new MensajeRespuesta();
@@ -116,16 +111,32 @@ public class servidor {
                 HeaderFormat prueba = new HeaderFormat();
                 //prueba.setFlags(pruebaMnesaje);
                 //System.out.println(pruebaMnesaje[0]);
-                //prueba.leerMensajePregunta(mensajePeticion);
-				prueba.hacerEncabezadoRespuesta(mensajePeticion);
+                prueba.leerMensajePregunta(mensajePeticion);
+				//prueba.hacerEncabezadoRespuesta(mensajePeticion);
                 //
-
                 //respuesta=encabezado.EncabezadoMensajeRespuestaSinError()+mensaje.MensajeRespuesta();
                 //bMensaje=respuesta.getBytes();
-                 String resp= "hola1";
-
-                DatagramPacket mensajeRespuesta = new DatagramPacket(resp.getBytes(), resp.length(),mensajePeticion.getAddress(),mensajePeticion.getPort());
-                servidorActivo.send(mensajeRespuesta);
+                
+                
+                
+                byte[] resp = new byte[1024];
+                //Revisa si el dominio esta en el masterFile
+                if(this.masterFile.containsKey(prueba.getPaginaPregunta())) {
+                	System.out.println("El dominio se encuentra en el MasterFile");
+                	prueba.crearResInterna(masterFile,mensajePeticion);
+                	//Aqui va metodo para realizar consulta interna
+                }
+                else {
+                	System.out.println("No mijo, aqui no esta");
+                	//Metodo para realizar consulta externa
+                }
+                 DatagramPacket paquete = new DatagramPacket(resp,resp.length, mensajePeticion.getAddress(), this.puerto_udp);
+         		try {
+         			servidorActivo.send(paquete);
+         			servidorActivo.close();
+         		} catch (Exception e) {
+         			System.out.println("Enviando...");
+         		}
             }
             
         }
