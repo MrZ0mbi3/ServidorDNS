@@ -27,7 +27,7 @@ public class ResRR {
 
 	public byte[] toByte() {
 
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		/*ByteArrayOutputStream out = new ByteArrayOutputStream();
 		DataOutputStream data = new DataOutputStream(out);
 
 		try {
@@ -42,7 +42,24 @@ public class ResRR {
 		} catch (IOException e) {
 			System.out.println("Error parsendo la respuesta del paquete.");
 			return null;
-		}
+		}*/
+
+		byte[] devolver = new byte[16];
+		devolver[0]=(byte) (this.name |0xf0);
+		devolver[1]= (byte) (this.name | 0xf);//nombre
+		devolver[2]=(byte) (this.tipo |0xf0);
+		devolver[3]=(byte) (this.tipo |0xf);//tipo
+		devolver[4]= (byte) (this.clase | 0xf0);
+		devolver[5]=(byte) (this.clase | 0xf);//clase
+		devolver[6]=(byte) (this.TLL | 0xf000);
+		devolver[7]=(byte) (this.TLL | 0xf00);
+		devolver[8]=(byte) (this.TLL | 0xf0);
+		devolver[9]=(byte) (this.TLL | 0xf);//ttl
+		devolver[10]=(byte) (this.length |0xf0);
+		devolver[11]=(byte) (this.length |0xf);//lenght
+		System.arraycopy(this.address.getAddress(), 0, devolver, 12, 4);
+		return devolver;
+
 	}
 
 	public short getName() {

@@ -34,6 +34,7 @@ public class HeaderFormat {
 	// Header en byte
 	byte[] encabezado;
 	byte[] cuerpo;
+	byte[] pregunta;
 	String paginaPregunta;
 
 	public HeaderFormat() {
@@ -90,10 +91,11 @@ public class HeaderFormat {
 		System.out.println("ARCount " + (mensaje[10] | mensaje[11]));
 		System.out.println("Fin del encabezado");
 		System.out.println("Inicio de la query");
+		this.pregunta=new byte[PaqueteMensaje.getLength()];
+
 
 		for (int i = 12; i < PaqueteMensaje.getLength() - 5; i++) {
-			// System.out.println("linea "+ i + "mensaje "+(char)(mensaje[i]) ) ;
-			// System.out.println("linea "+ i + "mensaje "+(mensaje[i]) ) ;
+
 			if ((mensaje[i] > 47 && mensaje[i] < 58) || (mensaje[i] > 64 && mensaje[i] < 91)
 					|| (mensaje[i] > 96 && mensaje[i] < 123)) // validar que solo reciba caracteres y numeros
 			{
@@ -111,6 +113,11 @@ public class HeaderFormat {
 			}
 
 		}
+
+		//guardar la pregunta
+		System.arraycopy(mensaje, 12, this.pregunta, 0, PaqueteMensaje.getLength());
+		System.out.println("tamano paquete " + PaqueteMensaje.getLength() + "   lo que asignamos a la pregunta " + (PaqueteMensaje.getLength()-10) );
+
 		System.out.println("pagina buscada =" + paginaPregunta); // encuentra la pagina pero sin puntos
 		// Desde 4 antes del tamano final porque hay un byte null despues del mensaje
 		// que indica que finalizo este
@@ -133,11 +140,14 @@ public class HeaderFormat {
 		
 	}
 	public byte[] crearResInterna(HashMap<String, ArrayList<ResRR>> masterFile, DatagramPacket PaqueteMensaje) {
-		hacerEncabezadoRespuesta(PaqueteMensaje);
 		hacerBodyRespuestaInterna(masterFile);
+		hacerEncabezadoRespuesta(PaqueteMensaje);
 		imprimirRespuestaInterna();
 		System.out.println("aaaaaaaaaaaaaa " + this.cuerpo);
-		byte[] combined = new byte[this.encabezado.length + this.cuerpo.length];
+		byte[] combined = new byte[this.encabezado.length + this.pregunta.length + this.cuerpo.length+100];
+		System.arraycopy(this.encabezado, 0, combined, 0, this.encabezado.length);
+		System.arraycopy(this.pregunta, 0, combined, this.encabezado.length, this.pregunta.length-12);
+		System.arraycopy(this.cuerpo, 0, combined, this.pregunta.length, this.cuerpo.length);
 		return combined;
 	}
 
@@ -149,14 +159,18 @@ public class HeaderFormat {
 		//Saca todas las respuestas del masterFile
 		for (ResRR actual : rec) {
 			try {
+				
 				data.write(actual.toByte());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+		this.ANCount=(short)rec.size();
 		System.out.println(out + "+++++++++++++++");
-		this.cuerpo = out.toByteArray();
+		//this.cuerpo = out.toByteArray();
+		this.cuerpo= rec.get(0).toByte();
+		System.out.println("tamano cuerpo  " + this.cuerpo.length);
 	}
 
 	public void hacerEncabezadoRespuesta(DatagramPacket PaqueteMensaje) { // guarda el ID del encabezado de la pregunta
@@ -184,16 +198,13 @@ public class HeaderFormat {
 		this.encabezado[3] = (byte) (this.encabezado[3] | this.RCode);// RCode se debe cambiar si depronto
 		this.encabezado[4] = mensajePregunta[4]; // QDCount
 		this.encabezado[5] = mensajePregunta[5]; // QDCount 2
-		this.encabezado[6] = (byte) (this.ANCount & 0xff00);
-		this.encabezado[7] = (byte) (this.ANCount & 0xff);
-		this.encabezado[8] = 0;
-		this.encabezado[9] = 0;
-		this.encabezado[10] = 0;
-		this.encabezado[11] = 0;
-
-		for (int i = 0; i < 12; i++) {
-			System.out.println(this.encabezado[i]);
-		}
+		this.encabezado[6] = (byte) (this.ANCount & 0xff00); //ANCount 
+		this.encabezado[7] = (byte) (this.ANCount & 0xff);//ANCount 2
+		this.encabezado[8] = 0;// NSCount
+		this.encabezado[9] = 0;//NSCount 2
+		this.encabezado[10] = 0;//ARCcount
+		this.encabezado[11] = 0;//ARCount2
+		// 
 
 		//
 		//

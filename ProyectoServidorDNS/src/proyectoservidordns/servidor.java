@@ -91,7 +91,7 @@ public class servidor {
     {
         try
         {
-        	DatagramSocket servidorActivo = new DatagramSocket(this.puerto_udp,InetAddress.getByName("192.168.1.56") );//Se conecta a lka direccion ip dada y al puerto esto para que no presente conflictos por el uso de la ip
+        	DatagramSocket servidorActivo = new DatagramSocket(this.puerto_udp,InetAddress.getByName("192.168.0.6") );//Se conecta a lka direccion ip dada y al puerto esto para que no presente conflictos por el uso de la ip
             byte[] buffer = new byte[this.udpSize];
             HeaderFormat encabezado= new HeaderFormat();
             MensajeRespuesta mensaje = new MensajeRespuesta();
@@ -112,10 +112,8 @@ public class servidor {
                 //prueba.setFlags(pruebaMnesaje);
                 //System.out.println(pruebaMnesaje[0]);
                 prueba.leerMensajePregunta(mensajePeticion);
-				//prueba.hacerEncabezadoRespuesta(mensajePeticion);
-                //
-                //respuesta=encabezado.EncabezadoMensajeRespuestaSinError()+mensaje.MensajeRespuesta();
-                //bMensaje=respuesta.getBytes();
+
+
                 
                 
                 
