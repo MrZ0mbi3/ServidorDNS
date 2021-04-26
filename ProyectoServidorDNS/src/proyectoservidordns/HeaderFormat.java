@@ -69,6 +69,7 @@ public class HeaderFormat {
 				"_________________________________________________Mensaje entrante __________________________________________________________");
 		System.out.println("se imprime header");
 		System.out.println("ID " + (mensaje[0] | mensaje[1]));
+		this.ID = (byte)(mensaje[0] | mensaje[1]);
 		System.out.println("QR " + (mensaje[2] & 128));
 		System.out.println("OpCode " + (mensaje[2] & 120));
 		this.OpCode = (byte) (mensaje[2] & 120);
@@ -85,7 +86,6 @@ public class HeaderFormat {
 		System.out.println("QDCount " + (mensaje[4] | mensaje[5]));
 		this.QDCount = (short) (mensaje[4] | mensaje[5]);
 		System.out.println("ANCount " + (mensaje[6] | mensaje[7]));
-		;
 		System.out.println("NSCount " + (mensaje[8] | mensaje[9]));
 		System.out.println("ARCount " + (mensaje[10] | mensaje[11]));
 		System.out.println("Fin del encabezado");
@@ -123,10 +123,22 @@ public class HeaderFormat {
 
 	}
 
+	public void imprimirRespuestaInterna() {
+		System.out.println("--------------------Dominio : " + this.getPaginaPregunta() + " -------------------------------");
+		System.out.println("Se encontro el dominio en el MasterFile interno");
+		System.out.println("Transaction ID: 0x" + String.format("%x",this.ID));
+		System.out.println("Flags: " );
+		System.out.println("Questions: " + String.format("%x", this.QDCount));
+		System.out.println("Answers RR: "  );
+		
+	}
 	public byte[] crearResInterna(HashMap<String, ArrayList<ResRR>> masterFile, DatagramPacket PaqueteMensaje) {
 		hacerEncabezadoRespuesta(PaqueteMensaje);
 		hacerBodyRespuestaInterna(masterFile);
-		return null;
+		imprimirRespuestaInterna();
+		System.out.println("aaaaaaaaaaaaaa " + this.cuerpo);
+		byte[] combined = new byte[this.encabezado.length + this.cuerpo.length];
+		return combined;
 	}
 
 	public void hacerBodyRespuestaInterna(HashMap<String, ArrayList<ResRR>> masterFile) {
@@ -143,6 +155,7 @@ public class HeaderFormat {
 				e.printStackTrace();
 			}
 		}
+		System.out.println(out + "+++++++++++++++");
 		this.cuerpo = out.toByteArray();
 	}
 
@@ -170,7 +183,7 @@ public class HeaderFormat {
 		}
 		this.encabezado[3] = (byte) (this.encabezado[3] | this.RCode);// RCode se debe cambiar si depronto
 		this.encabezado[4] = mensajePregunta[4]; // QDCount
-		this.encabezado[5] = mensajePregunta[5]; // QDCount
+		this.encabezado[5] = mensajePregunta[5]; // QDCount 2
 		this.encabezado[6] = (byte) (this.ANCount & 0xff00);
 		this.encabezado[7] = (byte) (this.ANCount & 0xff);
 		this.encabezado[8] = 0;

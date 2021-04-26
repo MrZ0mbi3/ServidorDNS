@@ -123,7 +123,7 @@ public class servidor {
                 //Revisa si el dominio esta en el masterFile
                 if(this.masterFile.containsKey(prueba.getPaginaPregunta())) {
                 	System.out.println("El dominio se encuentra en el MasterFile");
-                	prueba.crearResInterna(masterFile,mensajePeticion);
+                	resp = prueba.crearResInterna(masterFile,mensajePeticion);
                 	//Aqui va metodo para realizar consulta interna
                 }
                 else {
