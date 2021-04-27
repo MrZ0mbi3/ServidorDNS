@@ -1,2 +1,4 @@
 $ORIGIN facebook.com
 facebook.com 1400 IN A 157.240.6.35
+facebook.com 1400 IN A 157.240.6.36
+facebook.com 1400 IN A 157.240.6.37

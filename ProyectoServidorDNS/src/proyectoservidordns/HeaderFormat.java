@@ -168,8 +168,8 @@ public class HeaderFormat {
 		}
 		this.ANCount=(short)rec.size();
 		System.out.println(out + "+++++++++++++++");
-		//this.cuerpo = out.toByteArray();
-		this.cuerpo= rec.get(0).toByte();
+		this.cuerpo = out.toByteArray();
+		//this.cuerpo= rec.get(0).toByte();
 		System.out.println("tamano cuerpo  " + this.cuerpo.length);
 	}
 

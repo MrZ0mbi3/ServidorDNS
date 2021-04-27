@@ -117,7 +117,7 @@ public class servidor {
                 
                 
                 
-                byte[] resp = new byte[1024];
+                byte[] resp = new byte[this.udpSize];
                 //Revisa si el dominio esta en el masterFile
                 if(this.masterFile.containsKey(prueba.getPaginaPregunta())) {
                 	System.out.println("El dominio se encuentra en el MasterFile");
@@ -128,7 +128,7 @@ public class servidor {
                 	System.out.println("No mijo, aqui no esta");
                 	//Metodo para realizar consulta externa
                 }
-                 DatagramPacket paquete = new DatagramPacket(resp,resp.length, mensajePeticion.getAddress(), this.puerto_udp);
+                 DatagramPacket paquete = new DatagramPacket(resp,resp.length-112, mensajePeticion.getAddress(), this.puerto_udp);
          		try {
          			servidorActivo.send(paquete);
          			servidorActivo.close();
