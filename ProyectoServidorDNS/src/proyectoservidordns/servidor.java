@@ -87,7 +87,7 @@ public class servidor {
     {
         try
         {
-        	DatagramSocket servidorActivo = new DatagramSocket(this.puerto_udp,InetAddress.getByName("192.168.0.6") );//Se conecta a lka direccion ip dada y al puerto esto para que no presente conflictos por el uso de la ip
+        	
             byte[] buffer = new byte[this.udpSize];
             HeaderFormat encabezado= new HeaderFormat();
             String respuesta;
@@ -95,21 +95,18 @@ public class servidor {
             System.out.println("Iniciando servidor");
             while(true)   
             {
+				DatagramSocket servidorActivo = new DatagramSocket(this.puerto_udp,InetAddress.getByName("192.168.0.6") );//Se conecta a lka direccion ip dada y al puerto esto para que no presente conflictos por el uso de la ip
                 DatagramPacket mensajePeticion = new DatagramPacket(buffer, buffer.length);
                 
                 servidorActivo.receive(mensajePeticion);
                 
-                System.out.println("mensaje recibido del host = "+ mensajePeticion.getAddress() + "desde el puerto: " + mensajePeticion.getPort()) ;
+                System.out.println("mensaje recibido del host = "+ mensajePeticion.getAddress().getHostAddress() + "desde el puerto: " + mensajePeticion.getPort()) ;
                 //byte[] pruebaMnesaje = mensajePeticion.getData();
                 System.out.println("prueba puerto "+ mensajePeticion.getPort() + "tamano del mensaje"+ mensajePeticion.getLength());
                 
                 HeaderFormat prueba = new HeaderFormat();
                 prueba.leerMensajePregunta(mensajePeticion);
 
-
-                
-                
-                
                 byte[] resp = new byte[this.udpSize];
                 //Revisa si el dominio esta en el masterFile
                 if(this.masterFile.containsKey(prueba.getPaginaPregunta())) {
@@ -121,7 +118,7 @@ public class servidor {
                 	System.out.println("No mijo, aqui no esta");
                 	//Metodo para realizar consulta externa
                 }
-                 DatagramPacket paquete = new DatagramPacket(resp,resp.length-112, mensajePeticion.getAddress(), this.puerto_udp);
+                 DatagramPacket paquete = new DatagramPacket(resp,resp.length-112, mensajePeticion.getAddress(), mensajePeticion.getPort());
          		try {
          			servidorActivo.send(paquete);
          			servidorActivo.close();

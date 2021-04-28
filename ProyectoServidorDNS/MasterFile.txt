@@ -2,6 +2,17 @@ $ORIGIN facebook.com
 facebook.com 1400 IN A 157.240.6.35
 facebook.com 1400 IN A 157.240.6.36
 facebook.com 1400 IN A 157.240.6.37
-google.com 1400 IN A 155.240.0.3
 $ORIGIN yahoo.com
 yahoo.com 1400 IN A 10.10.10.1
+$ORIGIN google.com
+google.com 1400 IN A 142.250.78.78
+$ORIGIN prueba1.com.co
+prueba1.com.co 1400 IN A 1.1.1.12
+$ORIGIN prueba2.net
+prueba2.net 1400 IN A 1.1.1.19
+$ORIGIN paginagobierno.gov.co
+paginagobierno.gov.co 1400 IN A 100.0.0.1
+paginagobierno.gov.co 1400 IN A 100.0.0.2
+paginagobierno.gov.co 1400 IN A 100.0.0.3
+paginagobierno.gov.co 1400 IN A 100.0.0.4
+paginagobierno.gov.co 1400 IN A 100.0.0.5
