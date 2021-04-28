@@ -2,3 +2,6 @@ $ORIGIN facebook.com
 facebook.com 1400 IN A 157.240.6.35
 facebook.com 1400 IN A 157.240.6.36
 facebook.com 1400 IN A 157.240.6.37
+google.com 1400 IN A 155.240.0.3
+$ORIGIN yahoo.com
+yahoo.com 1400 IN A 10.10.10.1

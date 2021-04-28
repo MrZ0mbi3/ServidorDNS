@@ -52,56 +52,27 @@ public class HeaderFormat {
 
 	}
 
-	public void setFlags(byte[] mensaje) {
-		short aux = (short) (mensaje[2] & 0x80);
-		this.QR = aux == 0x80 ? true : false;
-		aux = (short) (mensaje[2] & 0x78);
-		this.OpCode = (byte) (aux >> 3);
-		System.out.println("prueba" + QR + " flag op code= " + OpCode);
-
-	}
-
 	public void leerMensajePregunta(DatagramPacket PaqueteMensaje) {
 		paginaPregunta = new String();
 		String aux2 = new String();
 		char[] aux = new char[1];
-		byte[] mensaje = PaqueteMensaje.getData();
-		System.out.println(
-				"_________________________________________________Mensaje entrante __________________________________________________________");
-		System.out.println("se imprime header");
-		System.out.println("ID " + (mensaje[0] | mensaje[1]));
-		this.ID = (byte)(mensaje[0] | mensaje[1]);
-		System.out.println("QR " + (mensaje[2] & 128));
-		System.out.println("OpCode " + (mensaje[2] & 120));
-		this.OpCode = (byte) (mensaje[2] & 120);
-		System.out.println("AA " + (mensaje[2] & 4));
-		System.out.println("TC " + (mensaje[2] & 2));
-		this.TC = (mensaje[2] & 2) == 1 ? true : false;
-		System.out.println("RD " + (mensaje[2] & 1));
-		this.RD = (mensaje[2] & 1) == 1 ? true : false;
-		System.out.println("RA " + (mensaje[3] & 128));
-		this.RA = (mensaje[3] & 128) == 1 ? true : false;
-		System.out.println("Z " + (mensaje[3] & 112));
-		System.out.println("RCode " + (mensaje[3] & 15));
-		this.RCode = (byte) (mensaje[3] & 15);
-		System.out.println("QDCount " + (mensaje[4] | mensaje[5]));
+		byte[] mensaje = PaqueteMensaje.getData();		
+		this.ID = (byte)(mensaje[0] | mensaje[1]);		
+		this.OpCode = (byte) (mensaje[2] & 120);		
+		this.TC = (mensaje[2] & 2) == 1 ? true : false;		
+		this.RD = (mensaje[2] & 1) == 1 ? true : false;		
+		this.RA = (mensaje[3] & 128) == 1 ? true : false;		
+		this.RCode = (byte) (mensaje[3] & 15);		
 		this.QDCount = (short) (mensaje[4] | mensaje[5]);
-		System.out.println("ANCount " + (mensaje[6] | mensaje[7]));
-		System.out.println("NSCount " + (mensaje[8] | mensaje[9]));
-		System.out.println("ARCount " + (mensaje[10] | mensaje[11]));
-		System.out.println("Fin del encabezado");
-		System.out.println("Inicio de la query");
 		this.pregunta=new byte[PaqueteMensaje.getLength()];
 
 
 		for (int i = 12; i < PaqueteMensaje.getLength() - 5; i++) {
 
-			if ((mensaje[i] > 47 && mensaje[i] < 58) || (mensaje[i] > 64 && mensaje[i] < 91)
-					|| (mensaje[i] > 96 && mensaje[i] < 123)) // validar que solo reciba caracteres y numeros
+			if ((mensaje[i] > 47 && mensaje[i] < 58) || (mensaje[i] > 64 && mensaje[i] < 91)|| (mensaje[i] > 96 && mensaje[i] < 123)) // validar que solo reciba caracteres y numeros
 			{
-				// System.out.println("linea "+ i + "mensaje "+(char)(mensaje[i]) ) ;
 				aux[0] = (char) mensaje[i];
-				System.out.println("linea " + i + "mensaje " + aux[0]);
+				
 				paginaPregunta = aux2.concat(new String(aux));
 				aux2 = paginaPregunta;
 			} else {
@@ -116,17 +87,10 @@ public class HeaderFormat {
 
 		//guardar la pregunta
 		System.arraycopy(mensaje, 12, this.pregunta, 0, PaqueteMensaje.getLength());
-		System.out.println("tamano paquete " + PaqueteMensaje.getLength() + "   lo que asignamos a la pregunta " + (PaqueteMensaje.getLength()-10) );
 
-		System.out.println("pagina buscada =" + paginaPregunta); // encuentra la pagina pero sin puntos
+		// encuentra la pagina pero sin puntos
 		// Desde 4 antes del tamano final porque hay un byte null despues del mensaje
 		// que indica que finalizo este
-		System.out.println(
-				"Qtype " + (mensaje[PaqueteMensaje.getLength() - 4] | mensaje[PaqueteMensaje.getLength() - 3]));
-		System.out.println(
-				"QClass " + (mensaje[PaqueteMensaje.getLength() - 2] | mensaje[PaqueteMensaje.getLength() - 1]));
-		System.out.println(" tamano " + PaqueteMensaje.getLength());
-		System.out.println("Mensaje sin partir" + new String(PaqueteMensaje.getData()));
 
 	}
 
@@ -143,7 +107,6 @@ public class HeaderFormat {
 		hacerBodyRespuestaInterna(masterFile);
 		hacerEncabezadoRespuesta(PaqueteMensaje);
 		imprimirRespuestaInterna();
-		System.out.println("aaaaaaaaaaaaaa " + this.cuerpo);
 		byte[] combined = new byte[this.encabezado.length + this.pregunta.length + this.cuerpo.length+100];
 		System.arraycopy(this.encabezado, 0, combined, 0, this.encabezado.length);
 		System.arraycopy(this.pregunta, 0, combined, this.encabezado.length, this.pregunta.length-12);
@@ -167,18 +130,14 @@ public class HeaderFormat {
 			}
 		}
 		this.ANCount=(short)rec.size();
-		System.out.println(out + "+++++++++++++++");
 		this.cuerpo = out.toByteArray();
-		//this.cuerpo= rec.get(0).toByte();
-		System.out.println("tamano cuerpo  " + this.cuerpo.length);
+
 	}
 
 	public void hacerEncabezadoRespuesta(DatagramPacket PaqueteMensaje) { // guarda el ID del encabezado de la pregunta
 																			// que le llega
 		byte[] mensajePregunta = PaqueteMensaje.getData();
 		this.leerMensajePregunta(PaqueteMensaje);
-		System.out.println(
-				"_________________________________________________Respuesta Mensaje __________________________________________________________");
 		this.encabezado[0] = mensajePregunta[0];
 		this.encabezado[1] = mensajePregunta[1];
 		this.encabezado[2] = (byte) 128;// QR
@@ -235,8 +194,6 @@ public class HeaderFormat {
 			aux = (byte) (aux | 1);
 
 		}
-		System.out.println(aux);
-		System.out.println(Long.toBinaryString((long) aux));
 		// se guarda el primer byte de los flags desde QR a RD
 		this.encabezado[2] = aux;
 
@@ -244,8 +201,6 @@ public class HeaderFormat {
 			aux2 = (byte) 128;
 		}
 		aux2 = (byte) (aux2 | this.RCode);
-		System.out.println(aux2);
-		System.out.println(Long.toBinaryString((long) aux2));
 		this.encabezado[3] = aux2;
 	}
 

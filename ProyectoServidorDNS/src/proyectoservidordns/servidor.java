@@ -28,9 +28,7 @@ public class servidor {
 		this.masterFile = new HashMap<String, ArrayList<ResRR>>();
 		try {
 			// Saca la informacion del MasterFile para poderla mantener en memoria
-			System.out.println("Empezando a sacar datos del MasterFile");
 			obtenerMasterFileData();
-			System.out.println(this.masterFile);
 			
 
 		} catch (Exception e) {
@@ -39,9 +37,7 @@ public class servidor {
 	}
 
 	public void obtenerMasterFileData() throws Exception {
-		System.out.println("Entre");
 		BufferedReader br = new BufferedReader(new FileReader(new File("MasterFile.txt")));
-		System.out.println("Entre2");
 		String linea;
 		String dominio = "";
 		InetAddress ip;
@@ -65,7 +61,7 @@ public class servidor {
 				tipo = 0x0001;
 				clase = 0x0001;
 				ip = InetAddress.getByName(datos[4]);
-				ResRR resp = new ResRR(convertToShort(name), tipo, clase, ttl, len, ip);
+				ResRR resp = new ResRR((short) 0xc00c, tipo, clase, ttl, len, ip);
 
 				if (this.masterFile.containsKey(dominio)) {
 					this.masterFile.get(dominio).add(resp);
@@ -94,7 +90,6 @@ public class servidor {
         	DatagramSocket servidorActivo = new DatagramSocket(this.puerto_udp,InetAddress.getByName("192.168.0.6") );//Se conecta a lka direccion ip dada y al puerto esto para que no presente conflictos por el uso de la ip
             byte[] buffer = new byte[this.udpSize];
             HeaderFormat encabezado= new HeaderFormat();
-            MensajeRespuesta mensaje = new MensajeRespuesta();
             String respuesta;
             byte[] bMensaje= new byte[this.udpSize];
             System.out.println("Iniciando servidor");
@@ -109,8 +104,6 @@ public class servidor {
                 System.out.println("prueba puerto "+ mensajePeticion.getPort() + "tamano del mensaje"+ mensajePeticion.getLength());
                 
                 HeaderFormat prueba = new HeaderFormat();
-                //prueba.setFlags(pruebaMnesaje);
-                //System.out.println(pruebaMnesaje[0]);
                 prueba.leerMensajePregunta(mensajePeticion);
 
 
