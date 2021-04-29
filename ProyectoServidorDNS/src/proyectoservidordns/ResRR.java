@@ -7,21 +7,20 @@ import java.net.InetAddress;
 
 public class ResRR {
 
-	private short name;
+	private short nombre;
 	private short tipo;
 	private short clase;
 	private int TLL;
-	private short length;
+	private short tama;
 	private InetAddress address;
 
-	public ResRR(short name, short tipo, short clase, int tLL, short length, InetAddress address) {
-
+	public ResRR(short nombre, short tipo, short clase, int tLL, short tama, InetAddress address) {
 		super();
-		this.name = name;
+		this.nombre = nombre;
 		this.tipo = tipo;
 		this.clase = clase;
 		this.TLL = tLL;
-		this.length = length;
+		this.tama = tama;
 		this.address = address;
 	}
 
@@ -31,13 +30,12 @@ public class ResRR {
 		DataOutputStream data = new DataOutputStream(out);
 
 		try {
-			data.writeShort(name);
+			data.writeShort(nombre);
 			data.writeShort(tipo);
 			data.writeShort(clase);
 			data.writeInt(TLL);
-			data.writeShort(length);
+			data.writeShort(tama);
 			data.write(address.getAddress());
-
 			return out.toByteArray();
 		} catch (IOException e) {
 			System.out.println("Error parsendo la respuesta del paquete.");
@@ -48,11 +46,11 @@ public class ResRR {
 	}
 
 	public short getName() {
-		return name;
+		return nombre;
 	}
 
 	public void setName(short name) {
-		this.name = name;
+		this.nombre = name;
 	}
 
 	public short getTipo() {
@@ -80,11 +78,11 @@ public class ResRR {
 	}
 
 	public short getLength() {
-		return length;
+		return tama;
 	}
 
 	public void setLength(short length) {
-		this.length = length;
+		this.tama = length;
 	}
 
 	public InetAddress getAdress() {
