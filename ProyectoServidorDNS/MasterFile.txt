@@ -1,3 +1,15 @@
+$ORIGIN PC1.net
+PC1.net 1400 IN A 10.10.10.2
+$ORIGIN PC42.net
+PC42.net 1400 IN A 10.10.10.43
+$ORIGIN PC-1.net
+PC-1.net 1400 IN A 10.10.10.66
+$ORIGIN PC-21.net
+PC-21.net 1400 IN A 10.10.10.87
+$ORIGIN MATE-1.net
+mate-1.net 1400 IN A 10.10.10.6
+$ORIGIN CLOUD1.net
+cloud1.net 1400 IN A 10.10.10.88
 $ORIGIN facebook.com
 facebook.com 1400 IN A 157.240.6.35
 facebook.com 1400 IN A 157.240.6.36

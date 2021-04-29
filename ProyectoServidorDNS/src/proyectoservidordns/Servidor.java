@@ -1,4 +1,5 @@
 package proyectoservidordns;
+
 import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
@@ -63,10 +64,10 @@ public class Servidor {
 		try {
 			byte[] buffer = new byte[this.udpSize];
 			System.out.println("Iniciando servidor");
+			InetAddress serverIp = InetAddress.getByName("10.10.10.88");
 			while (true) {
-				DatagramSocket servidorActivo = new DatagramSocket(this.puerto_udp,
-						InetAddress.getByName("10.10.10.88"));// Se conecta a la direccion ip dada y al puerto esto
-																// para que no presente conflictos por el uso de la ip
+				//Se conecta a la direccion ip dada y al puerto esto para que no presente conflictos por el uso de la ip
+				DatagramSocket servidorActivo = new DatagramSocket(this.puerto_udp, serverIp);
 				DatagramPacket mensajePeticion = new DatagramPacket(buffer, buffer.length);
 
 				servidorActivo.receive(mensajePeticion);
@@ -78,6 +79,7 @@ public class Servidor {
 				prueba.leerMensajePregunta(mensajePeticion);
 
 				byte[] resp = new byte[this.udpSize];
+
 				// Revisa si el dominio esta en el masterFile
 				if (this.masterFile.containsKey(prueba.getPaginaPregunta())) {
 					System.out.println("El dominio se encuentra en el MasterFile");
