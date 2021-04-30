@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 public class Servidor {
 
 	private final int puerto_udp = 53;
+	private final int puerto_cliente=6566;
 	private final int udpSize = 512;
 	private HashMap<String, ArrayList<ResRR>> masterFile;
 
@@ -64,7 +65,7 @@ public class Servidor {
 		try {
 			byte[] buffer = new byte[this.udpSize];
 			System.out.println("Iniciando servidor");
-			InetAddress serverIp = InetAddress.getByName("10.10.10.88");
+			InetAddress serverIp = InetAddress.getByName("192.168.0.5");
 			while (true) {
 				//Se conecta a la direccion ip dada y al puerto esto para que no presente conflictos por el uso de la ip
 				DatagramSocket servidorActivo = new DatagramSocket(this.puerto_udp, serverIp);
@@ -87,9 +88,20 @@ public class Servidor {
 				} else {
 					System.out.println("No mijo, aqui no esta");
 					// Metodo para realizar consulta externa
+					DatagramSocket cliente = new DatagramSocket(this.puerto_cliente,serverIp );
+					DatagramPacket respuestaExterna=new DatagramPacket(buffer, buffer.length);
+					DatagramPacket preguntaExterna = new DatagramPacket(mensajePeticion.getData(), mensajePeticion.getLength(), InetAddress.getByName("8.8.8.8"), this.puerto_udp);
+					cliente.send(preguntaExterna);
+					cliente.receive(respuestaExterna);
+
+					System.out.println("----------------------- Respuesta externa ------------------------------------");
+					System.out.println("mensaje externo por DNS ->"+respuestaExterna.getAddress()+"  por el puerto ->"+respuestaExterna.getPort());
+					System.out.println("el mensaje es -> "+ respuestaExterna.getData());
+					resp=respuestaExterna.getData();
+					cliente.close();
+
 				}
-				DatagramPacket paquete = new DatagramPacket(resp, resp.length - 112, mensajePeticion.getAddress(),
-						mensajePeticion.getPort());
+				DatagramPacket paquete = new DatagramPacket(resp, resp.length - 112, mensajePeticion.getAddress(),mensajePeticion.getPort());
 				try {
 					servidorActivo.send(paquete);
 					servidorActivo.close();
