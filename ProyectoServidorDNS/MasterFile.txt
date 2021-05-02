@@ -1,27 +1,24 @@
-$ORIGIN PC1.net
-PC1.net 1400 IN A 10.10.10.2
-$ORIGIN PC42.net
-PC42.net 1400 IN A 10.10.10.43
-$ORIGIN PC-1.net
-PC-1.net 1400 IN A 10.10.10.66
-$ORIGIN PC-21.net
-PC-21.net 1400 IN A 10.10.10.87
-$ORIGIN MATE-1.net
-mate-1.net 1400 IN A 10.10.10.6
-$ORIGIN CLOUD1.net
-cloud1.net 1400 IN A 10.10.10.88
+$ORIGIN prueba1.com.co
+prueba1.com.co 1400 IN A 1.1.1.12
+$ORIGIN prueba2.gns3
+prueba2.gns3 1400 IN A 1.1.1.19
+prueba2.gns3 1400 IN A 1.1.1.20
+$ORIGIN PC1.gns3
+PC1.gns3 1400 IN A 10.10.10.2
+$ORIGIN PC42.gns3
+PC42.gns3 1400 IN A 10.10.10.43
+$ORIGIN PC21.gns3
+PC21.gns3 1400 IN A 10.10.10.87
+$ORIGIN MATE1.gns3
+mate1.gns3 1400 IN A 10.10.10.6
+$ORIGIN CLOUD1.gns3
+cloud1.gns3 1400 IN A 10.10.10.88
 $ORIGIN facebook.com
 facebook.com 1400 IN A 157.240.6.35
 facebook.com 1400 IN A 157.240.6.36
 facebook.com 1400 IN A 157.240.6.37
 $ORIGIN yahoo.com
-yahoo.com 1400 IN A 10.10.10.1
-$ORIGIN google.com
-google.com 1400 IN A 142.250.78.78
-$ORIGIN prueba1.com.co
-prueba1.com.co 1400 IN A 1.1.1.12
-$ORIGIN prueba2.net
-prueba2.net 1400 IN A 1.1.1.19
+yahoo.com 1400 IN A 10.10.11.1
 $ORIGIN paginagobierno.gov.co
 paginagobierno.gov.co 1400 IN A 100.0.0.1
 paginagobierno.gov.co 1400 IN A 100.0.0.2

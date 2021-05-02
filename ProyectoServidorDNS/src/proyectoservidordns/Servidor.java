@@ -20,7 +20,7 @@ public class Servidor {
 			// Saca la informacion del MasterFile para poderla mantener en memoria
 			obtenerMasterFileData();
 		} catch (Exception e) {
-			System.out.println("Error, no se pudo obtener la informacion del MasterFile");
+			//System.out.println("Error, no se pudo obtener la informacion del MasterFile");
 		}
 	}
 
@@ -65,7 +65,7 @@ public class Servidor {
 		try {
 			byte[] buffer = new byte[this.udpSize];
 			System.out.println("Iniciando servidor");
-			InetAddress serverIp = InetAddress.getByName("192.168.0.5");
+			InetAddress serverIp = InetAddress.getByName("10.10.10.88");
 			while (true) {
 				//Se conecta a la direccion ip dada y al puerto esto para que no presente conflictos por el uso de la ip
 				DatagramSocket servidorActivo = new DatagramSocket(this.puerto_udp, serverIp);
@@ -81,14 +81,15 @@ public class Servidor {
 
 				byte[] resp = new byte[this.udpSize];
 
-				// Revisa si el dominio esta en el masterFile
+				// Revisa si el dominio esta en el masterFile;
 				if (this.masterFile.containsKey(prueba.getPaginaPregunta())) {
 					System.out.println("El dominio se encuentra en el MasterFile");
 					resp = prueba.crearResInterna(masterFile, mensajePeticion);
 				} else {
-					System.out.println("No mijo, aqui no esta");
+					System.out.println("El dominio "+ prueba.getPaginaPregunta() + " no se encuentra en el masterFile");
+					System.out.println("Realizando conexion con el servidor externo...");
 					// Metodo para realizar consulta externa
-					DatagramSocket cliente = new DatagramSocket(this.puerto_cliente,serverIp );
+					DatagramSocket cliente = new DatagramSocket(this.puerto_cliente,InetAddress.getByName("192.168.1.56"));
 					DatagramPacket respuestaExterna=new DatagramPacket(buffer, buffer.length);
 					DatagramPacket preguntaExterna = new DatagramPacket(mensajePeticion.getData(), mensajePeticion.getLength(), InetAddress.getByName("8.8.8.8"), this.puerto_udp);
 					cliente.send(preguntaExterna);
@@ -96,7 +97,7 @@ public class Servidor {
 
 					System.out.println("----------------------- Respuesta externa ------------------------------------");
 					System.out.println("mensaje externo por DNS ->"+respuestaExterna.getAddress()+"  por el puerto ->"+respuestaExterna.getPort());
-					System.out.println("el mensaje es -> "+ respuestaExterna.getData());
+					//System.out.println("el mensaje es -> "+ String.format("%x", respuestaExterna.getData()));
 					resp=respuestaExterna.getData();
 					cliente.close();
 

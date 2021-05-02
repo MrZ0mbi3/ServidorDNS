@@ -61,7 +61,7 @@ public class DNSQuery {
 				}
 			}
 		}
-
+		paginaPregunta = paginaPregunta.replace("...........", "");
 		// guardar la pregunta
 		System.arraycopy(mensaje, 12, this.pregunta, 0, PaqueteMensaje.getLength());
 		// encuentra la pagina pero sin puntos
@@ -116,7 +116,7 @@ public class DNSQuery {
 			this.encabezado[2] = (byte) (this.encabezado[2] | 1);// RD
 		}
 		if (this.RA) {
-			this.encabezado[3] = (byte) (this.encabezado[3] | 128);// RD
+			this.encabezado[3] = (byte) (0);// RA
 		}
 		this.encabezado[3] = (byte) (this.encabezado[3] | this.RCode);// RCode se debe cambiar si depronto
 		this.encabezado[4] = mensajePregunta[4]; // QDCount
