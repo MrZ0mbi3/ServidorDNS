@@ -4,6 +4,7 @@ import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,32 +26,28 @@ public class Servidor {
 	}
 
 	public void obtenerMasterFileData() throws Exception {
-		BufferedReader br = new BufferedReader(new FileReader(new File("MasterFile.txt")));
+		Scanner input = new Scanner(new FileReader(new File("MasterFile.txt")));
 		String linea;
-		String dominio = "";
 		InetAddress ip;
 		int ttl;
-
-		while ((linea = br.readLine()) != null) {
-
-			String[] datos = linea.split(" ");
-
-			if (!datos[0].equalsIgnoreCase("$ORIGIN")) {
+		while (input.hasNextLine()) {
+			linea = input.nextLine();
+			String[] res = linea.split(" ");
+			if (!res[0].equalsIgnoreCase("$ORIGIN")) {
 				ArrayList<ResRR> ips = new ArrayList<ResRR>();
-				dominio = datos[0];
-				ttl = Integer.parseInt(datos[1]);
-				ip = InetAddress.getByName(datos[4]);
-				ResRR resp = new ResRR((short) 0xc00c, (short) 0x0001, (short) 0x0001, ttl, (short) 4, ip);
+				ttl = Integer.parseInt(res[1]);
+				ip = InetAddress.getByName(res[4]);
+				ResRR resp = new ResRR(ttl, ip);
 
-				if (this.masterFile.containsKey(dominio)) {
-					this.masterFile.get(dominio).add(resp);
+				if (this.masterFile.containsKey(res[0])) {
+					this.masterFile.get(res[0]).add(resp);
 				} else {
 					ips.add(resp);
-					this.masterFile.put(dominio, ips);
+					this.masterFile.put(res[0], ips);
 				}
 			}
 		}
-		br.close();
+		input.close();
 	}
 
 	void servidorActivo() {
@@ -94,7 +91,7 @@ public class Servidor {
 					cliente.close();
 
 				}
-				DatagramPacket paquete = new DatagramPacket(resp, resp.length - 112, mensajePeticion.getAddress(),mensajePeticion.getPort());
+				DatagramPacket paquete = new DatagramPacket(resp, resp.length , mensajePeticion.getAddress(),mensajePeticion.getPort());
 				try {
 					servidorActivo.send(paquete);
 					servidorActivo.close();

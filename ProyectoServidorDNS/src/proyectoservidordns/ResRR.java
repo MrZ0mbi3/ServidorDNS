@@ -14,12 +14,13 @@ public class ResRR {
 	private short tama;
 	private InetAddress address;
 
-	public ResRR(short nombre, short tipo, short clase, int tLL, short tama, InetAddress address) {
-		this.nombre = nombre;
-		this.tipo = tipo;
-		this.clase = clase;
+	public ResRR(int tLL, InetAddress address) {
+		super();
+		this.nombre = (short) 0xc00c;
+		this.tipo = (short) 0x0001;
+		this.clase = (short) 0x0001;
 		this.TLL = tLL;
-		this.tama = tama;
+		this.tama = (short) 4;
 		this.address = address;
 	}
 
