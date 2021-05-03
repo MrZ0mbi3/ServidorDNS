@@ -20,16 +20,33 @@ public class DNSQuery {
 	private boolean RD;// 1 bit |________________
 	private boolean RA; // 1 bit |
 	private byte RCode; // 4 bits |
+	private byte Z; // 3 bits los 3 en 0 | 1 byte
 	short QDCount;
 	short ANCount;
 	short NSCount;
 	short ARCount;
+	private boolean QR; // 1 bit |
 
 	// Respuesta
 	byte[] encabezado = new byte[12];
 	byte[] cuerpo;
 	byte[] pregunta;
 	String paginaPregunta;
+	
+	public DNSQuery() {
+		// se crea con 12 porque un byte almacena 8 bits y se necesitan 6 espacios de 16
+		// bits
+		encabezado = new byte[12];
+		this.QR = true;
+		this.OpCode = 1;
+		this.AA = true;
+		this.TC = false;
+		this.RD = false;
+		this.RA = false;
+		this.Z = 0;
+		this.RCode = 1;
+
+	}
 
 	public void leerMensajePregunta(DatagramPacket PaqueteMensaje) {
 		paginaPregunta = new String();
@@ -61,6 +78,7 @@ public class DNSQuery {
 				}
 			}
 		}
+		//Elimina puntos extra que manda una maquina linux
 		paginaPregunta = paginaPregunta.replace("...........", "");
 		// guardar la pregunta
 		System.arraycopy(mensaje, 12, this.pregunta, 0, PaqueteMensaje.getLength());
@@ -75,7 +93,7 @@ public class DNSQuery {
 		imprimirRespuestaInterna(masterFile);
 		byte[] combined = new byte[this.encabezado.length + this.pregunta.length + this.cuerpo.length + 100];
 		System.arraycopy(this.encabezado, 0, combined, 0, this.encabezado.length);
-		System.arraycopy(this.pregunta, 0, combined, this.encabezado.length, this.pregunta.length - 12);
+		System.arraycopy(this.pregunta, 0, combined, this.encabezado.length, this.pregunta.length );
 		System.arraycopy(this.cuerpo, 0, combined, this.pregunta.length, this.cuerpo.length);
 		return combined;
 	}
@@ -144,6 +162,42 @@ public class DNSQuery {
 			i++;
 		}
 	}
+	
+	public void hacerFlags() {
+		byte aux = 0;
+		byte aux2 = 0;
+		if (this.QR) {
+			// 1000 0000
+			aux = (byte) 128;
+		}
+		// para que se compare en la posicion correcta
+		// 1_ _ _ _000
+		this.OpCode = (byte) (this.OpCode << 3);
+
+		aux = (byte) (aux | this.OpCode);
+		if (this.AA) { // 1000 0_00
+			aux = (byte) (aux | 4);
+		}
+		if (this.TC) {
+			// 1000 00_0
+			aux = (byte) (aux | 2);
+		}
+		if (this.RD) {
+			// 1000 00_0
+			aux = (byte) (aux | 1);
+
+		}
+		// se guarda el primer byte de los flags desde QR a RD
+		this.encabezado[2] = aux;
+
+		if (this.RA) {
+			aux2 = (byte) 128;
+		}
+		aux2 = (byte) (aux2 | this.RCode);
+		this.encabezado[3] = aux2;
+	}
+
+
 
 	public String getPaginaPregunta() {
 		return paginaPregunta;

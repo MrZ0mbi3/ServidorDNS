@@ -20,7 +20,7 @@ public class Servidor {
 			// Saca la informacion del MasterFile para poderla mantener en memoria
 			obtenerMasterFileData();
 		} catch (Exception e) {
-			//System.out.println("Error, no se pudo obtener la informacion del MasterFile");
+			System.out.println("Error, no se pudo obtener la informacion del MasterFile");
 		}
 	}
 
@@ -30,23 +30,17 @@ public class Servidor {
 		String dominio = "";
 		InetAddress ip;
 		int ttl;
-		short tipo;
-		short clase;
-		short len = 4;
 
 		while ((linea = br.readLine()) != null) {
 
 			String[] datos = linea.split(" ");
 
 			if (!datos[0].equalsIgnoreCase("$ORIGIN")) {
-
 				ArrayList<ResRR> ips = new ArrayList<ResRR>();
 				dominio = datos[0];
 				ttl = Integer.parseInt(datos[1]);
-				tipo = 0x0001;
-				clase = 0x0001;
 				ip = InetAddress.getByName(datos[4]);
-				ResRR resp = new ResRR((short) 0xc00c, tipo, clase, ttl, len, ip);
+				ResRR resp = new ResRR((short) 0xc00c, (short) 0x0001, (short) 0x0001, ttl, (short) 4, ip);
 
 				if (this.masterFile.containsKey(dominio)) {
 					this.masterFile.get(dominio).add(resp);
@@ -56,9 +50,7 @@ public class Servidor {
 				}
 			}
 		}
-
 		br.close();
-
 	}
 
 	void servidorActivo() {

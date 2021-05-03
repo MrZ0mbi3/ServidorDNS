@@ -15,7 +15,6 @@ public class ResRR {
 	private InetAddress address;
 
 	public ResRR(short nombre, short tipo, short clase, int tLL, short tama, InetAddress address) {
-		super();
 		this.nombre = nombre;
 		this.tipo = tipo;
 		this.clase = clase;
